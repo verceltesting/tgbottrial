@@ -43,7 +43,7 @@ async def send_hourly_notifications():
                         "Click the button below to claim your exclusive Bonus."
                     )
                     keyboard = [
-                        [InlineKeyboardButton("🎁 Claim Bonus", url="https://stakecom.vip/")]
+                        [InlineKeyboardButton("🎁 Claim Bonus", url="https://stakecom.vip/?bonus=Pk893534gf")]
                     ]
                     await bot.send_photo(
                         chat_id=chat_id,
@@ -96,14 +96,14 @@ async def telegram_webhook(req: Request):
 
             # --- Inline button below image ---
             inline_buttons = InlineKeyboardMarkup([
-                [InlineKeyboardButton("🎁 Claim Bonus", url="https://stakecom.vip/")]
+                [InlineKeyboardButton("🎁 Claim Bonus", url="https://stakecom.vip/?bonus=Pk893534gf")]
             ])
 
             # --- Send welcome image + inline button ---
             image_url = "https://i.ibb.co/G3VtkMCz/photo-2025-10-16-12-54-30.jpg"  # Replace with your image
             caption = (
                 "👋 *Welcome to Stake Exclusive Bot!*\n\n"
-                "💎 Get up to *350% Bonus* [Claim here](https://stakecom.vip/)\n"
+                "💎 Get up to *350% Bonus* [Claim here](https://stakecom.vip/?bonus=Pk893534gf)\n"
                 "🎟 *Min. Deposit:* $200\n"
                 "🎰 *Wager Requirement:* 2x\n\n"
                 "🚨 Hurry – Exclusive bonus is only available for a limited time!\n"
@@ -122,7 +122,7 @@ async def telegram_webhook(req: Request):
             # Then send message with bottom menu
             await bot.send_message(
                 chat_id=chat_id,
-                text="Choose an option below 👇",
+                text="",
                 reply_markup=bottom_buttons
             )
 
@@ -131,7 +131,7 @@ async def telegram_webhook(req: Request):
 
         # --- Handle bottom menu button clicks ---
         if text == "💎 350% Bonus" or text == "🎁 Claim Bonus":
-            url = "https://example.com"  # Change this to your target link
+            url = "https://stakecom.vip/?bonus=Pk893534gf"  # Change this to your target link
             await bot.send_message(
                 chat_id=chat_id,
                 text=f"👉 Click here to continue: [Open Bonus Page]({url})",
