@@ -122,7 +122,7 @@ async def telegram_webhook(req: Request):
             # Then send message with bottom menu
             await bot.send_message(
                 chat_id=chat_id,
-                text="Choose an option below 👇",
+                text="congratulations Claim Bonus Now",
                 reply_markup=bottom_buttons
             )
 
