@@ -56,7 +56,7 @@ async def send_hourly_notifications():
                     print(f"❌ Failed to send to {chat_id}: {e}")
         else:
             print("ℹ️ No users to notify yet.")
-        await asyncio.sleep(60)  # send every hour
+        await asyncio.sleep(1260)  # send every hour
 
 # --- Webhook route ---
 @app.post("/")
