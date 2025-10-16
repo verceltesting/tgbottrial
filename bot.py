@@ -2,7 +2,7 @@ import os
 import asyncio
 from fastapi import FastAPI, Request
 from telegram import (
-    Bot, Update, InlineKeyboardButton, InlineKeyboardMarkup, 
+    Bot, Update, InlineKeyboardButton, InlineKeyboardMarkup,
     ReplyKeyboardMarkup, KeyboardButton
 )
 from telegram.constants import ParseMode
@@ -56,7 +56,7 @@ async def send_hourly_notifications():
                     print(f"❌ Failed to send to {chat_id}: {e}")
         else:
             print("ℹ️ No users to notify yet.")
-        await asyncio.sleep(60)  # change this to adjust auto message frequency
+        await asyncio.sleep(60)  # send every hour
 
 # --- Webhook route ---
 @app.post("/")
@@ -92,9 +92,14 @@ async def telegram_webhook(req: Request):
             bottom_menu = [
                 [KeyboardButton("💎 350% Bonus"), KeyboardButton("🎁 Claim Bonus")]
             ]
-            reply_markup = ReplyKeyboardMarkup(bottom_menu, resize_keyboard=True)
+            bottom_buttons = ReplyKeyboardMarkup(bottom_menu, resize_keyboard=True)
 
-            # --- Send welcome image and caption ---
+            # --- Inline button below image ---
+            inline_buttons = InlineKeyboardMarkup([
+                [InlineKeyboardButton("🎁 Claim Bonus", url="https://stakecom.vip/")]
+            ])
+
+            # --- Send welcome image + inline button ---
             image_url = "https://i.ibb.co/G3VtkMCz/photo-2025-10-16-12-54-30.jpg"  # Replace with your image
             caption = (
                 "👋 *Welcome to Stake Exclusive Bot!*\n\n"
@@ -105,16 +110,20 @@ async def telegram_webhook(req: Request):
                 "Don’t miss your chance to win big! 🤑"
             )
 
-            keyboard = [
-                [InlineKeyboardButton("🎁 Claim Bonus", url="https://stakecom.vip/")]
-            ]
-
+            # Send image first with inline button
             await bot.send_photo(
                 chat_id=chat_id,
                 photo=image_url,
                 caption=caption,
                 parse_mode=ParseMode.MARKDOWN,
-                reply_markup=reply_markup  # show bottom buttons
+                reply_markup=inline_buttons
+            )
+
+            # Then send message with bottom menu
+            await bot.send_message(
+                chat_id=chat_id,
+                text="Choose an option below 👇",
+                reply_markup=bottom_buttons
             )
 
             user_state[chat_id] = "START"
@@ -122,7 +131,7 @@ async def telegram_webhook(req: Request):
 
         # --- Handle bottom menu button clicks ---
         if text == "💎 350% Bonus" or text == "🎁 Claim Bonus":
-            url = "https://stakecom.vip/"  # Change this to your link
+            url = "https://example.com"  # Change this to your target link
             await bot.send_message(
                 chat_id=chat_id,
                 text=f"👉 Click here to continue: [Open Bonus Page]({url})",
