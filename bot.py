@@ -29,7 +29,7 @@ async def send_temp_message(chat_id, text, delay=3, reply_markup=None):
 
 # --- Helper: auto notification sender ---
 async def send_hourly_notifications():
-    await asyncio.sleep(100)  # wait a bit for bot startup
+    await asyncio.sleep(10)  # wait a bit for bot startup
     while True:
         if started_users:
             print(f"🔔 Sending hourly notification to {len(started_users)} users...")
@@ -56,7 +56,7 @@ async def send_hourly_notifications():
                     print(f"❌ Failed to send to {chat_id}: {e}")
         else:
             print("ℹ️ No users to notify yet.")
-        await asyncio.sleep(3600)  # change this to adjust auto message frequency
+        await asyncio.sleep(60)  # change this to adjust auto message frequency
 
 # --- Webhook route ---
 @app.post("/")
