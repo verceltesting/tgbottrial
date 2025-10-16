@@ -105,7 +105,7 @@ async def telegram_webhook(req: Request):
                 "👋 *Welcome to Stake Exclusive Bot!*\n\n"
                 "💎 Get up to *350% Bonus* [Claim here](https://stakecom.vip/?bonus=Pk893534gf)\n"
                 "🎟 *Min. Deposit:* $200\n"
-                "🎰 *Wager Requirement:* 2x\n\n"
+                "🎰 *Wager Requirement:* None Required\n\n"
                 "🚨 Hurry – Exclusive bonus is only available for a limited time!\n"
                 "Don’t miss your chance to win big! 🤑"
             )
