@@ -120,9 +120,9 @@ async def telegram_webhook(req: Request):
             )
 
             # Then send message with bottom menu
-          await bot.send_message(
+            await bot.send_message(
                 chat_id=chat_id,
-                text="Congratulations 🎁 Collect Bonus Now",
+                text="Choose an option below 👇",
                 reply_markup=bottom_buttons
             )
 
@@ -130,15 +130,6 @@ async def telegram_webhook(req: Request):
             return {"ok": True}
 
 
-
-
-
-
-
-
-
-
-        
         # --- Handle bottom menu button clicks ---
         if text == "💎 350% Bonus" or text == "🎁 Claim Bonus":
             url = "https://stakecom.vip/?bonus=Pk893534gf"  # Change this to your target link
