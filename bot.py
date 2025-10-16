@@ -1,7 +1,10 @@
 import os
 import asyncio
 from fastapi import FastAPI, Request
-from telegram import Bot, Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import (
+    Bot, Update, InlineKeyboardButton, InlineKeyboardMarkup, 
+    ReplyKeyboardMarkup, KeyboardButton
+)
 from telegram.constants import ParseMode
 
 # --- Environment Variables ---
@@ -26,7 +29,7 @@ async def send_temp_message(chat_id, text, delay=3, reply_markup=None):
 
 # --- Helper: auto notification sender ---
 async def send_hourly_notifications():
-    await asyncio.sleep(10)  # wait a bit for bot startup
+    await asyncio.sleep(100)  # wait a bit for bot startup
     while True:
         if started_users:
             print(f"🔔 Sending hourly notification to {len(started_users)} users...")
@@ -53,7 +56,7 @@ async def send_hourly_notifications():
                     print(f"❌ Failed to send to {chat_id}: {e}")
         else:
             print("ℹ️ No users to notify yet.")
-        await asyncio.sleep(150)  # wait 1 hour before sending again
+        await asyncio.sleep(3600)  # change this to adjust auto message frequency
 
 # --- Webhook route ---
 @app.post("/")
@@ -85,11 +88,17 @@ async def telegram_webhook(req: Request):
             except Exception as e:
                 print("Cleanup error:", e)
 
+            # --- Create bottom menu buttons ---
+            bottom_menu = [
+                [KeyboardButton("💎 350% Bonus"), KeyboardButton("🎁 Claim Bonus")]
+            ]
+            reply_markup = ReplyKeyboardMarkup(bottom_menu, resize_keyboard=True)
+
             # --- Send welcome image and caption ---
             image_url = "https://i.ibb.co/G3VtkMCz/photo-2025-10-16-12-54-30.jpg"  # Replace with your image
             caption = (
                 "👋 *Welcome to Stake Exclusive Bot!*\n\n"
-                "💎 Get up to *250% Bonus* [Claim here](https://stakecom.vip/)\n"
+                "💎 Get up to *350% Bonus* [Claim here](https://stakecom.vip/)\n"
                 "🎟 *Min. Deposit:* $200\n"
                 "🎰 *Wager Requirement:* 2x\n\n"
                 "🚨 Hurry – Exclusive bonus is only available for a limited time!\n"
@@ -105,13 +114,22 @@ async def telegram_webhook(req: Request):
                 photo=image_url,
                 caption=caption,
                 parse_mode=ParseMode.MARKDOWN,
-                reply_markup=InlineKeyboardMarkup(keyboard)
+                reply_markup=reply_markup  # show bottom buttons
             )
 
             user_state[chat_id] = "START"
             return {"ok": True}
 
-        
+        # --- Handle bottom menu button clicks ---
+        if text == "💎 350% Bonus" or text == "🎁 Claim Bonus":
+            url = "https://stakecom.vip/"  # Change this to your link
+            await bot.send_message(
+                chat_id=chat_id,
+                text=f"👉 Click here to continue: [Open Bonus Page]({url})",
+                parse_mode=ParseMode.MARKDOWN
+            )
+
+    return {"ok": True}
 
 # --- Webhook setup ---
 async def set_webhook():
