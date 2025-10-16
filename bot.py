@@ -120,6 +120,14 @@ async def telegram_webhook(req: Request):
             )
 
             # Then send message with bottom menu
+          await bot.send_message(
+                chat_id=chat_id,
+                text="Congratulations 🎁 Collect Bonus Now",
+                reply_markup=bottom_buttons
+            )
+
+            user_state[chat_id] = "START"
+            return {"ok": True}
 
 
 
